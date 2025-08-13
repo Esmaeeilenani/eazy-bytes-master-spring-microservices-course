@@ -33,9 +33,6 @@ public class AccountsService {
         }
 
         Customer customer = CustomerMapper.mapToCustomer(customerDto, new Customer());
-        customer.setCreatedAt(LocalDateTime.now());
-        customer.setCreatedBy("Anonymous");
-
         customerRepository.save(customer);
 
         accountsRepository.save(createNewAccount(customer));
@@ -92,8 +89,6 @@ public class AccountsService {
             if (accountsDto.getBranchAddress() != null) {
                 accounts.setBranchAddress(accountsDto.getBranchAddress());
             }
-            accounts.setUpdatedAt(LocalDateTime.now());
-            accounts.setUpdatedBy("Anonymous");
 
             accountsRepository.save(accounts);
 
