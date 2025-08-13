@@ -1,10 +1,13 @@
 package com.esmaeeil.eazybank.accounts.service;
 
 import com.esmaeeil.eazybank.accounts.constants.AccountsConstants;
+import com.esmaeeil.eazybank.accounts.dto.AccountsDto;
 import com.esmaeeil.eazybank.accounts.dto.CustomerDto;
 import com.esmaeeil.eazybank.accounts.entity.Accounts;
 import com.esmaeeil.eazybank.accounts.entity.Customer;
 import com.esmaeeil.eazybank.accounts.exception.CustomerAlreadyExistsException;
+import com.esmaeeil.eazybank.accounts.exception.ResourceNotFoundException;
+import com.esmaeeil.eazybank.accounts.mapper.AccountsMapper;
 import com.esmaeeil.eazybank.accounts.mapper.CustomerMapper;
 import com.esmaeeil.eazybank.accounts.repository.AccountsRepository;
 import com.esmaeeil.eazybank.accounts.repository.CustomerRepository;
@@ -55,4 +58,18 @@ public class AccountsService {
     }
 
 
+    public CustomerDto fetchAccount(String mobileNumber) {
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer with mobile number " + mobileNumber + " not found"));
+
+        Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId())
+                .orElseThrow(() -> new ResourceNotFoundException("Account with customer Id: " + customer.getCustomerId() + " not found"));
+
+        CustomerDto customerDto = CustomerMapper.mapToCustomerDto(customer, new CustomerDto());
+
+        customerDto.setAccountsDto(AccountsMapper.mapToAccountsDto(accounts, new AccountsDto()));
+
+
+        return customerDto;
+    }
 }
