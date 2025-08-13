@@ -1,10 +1,10 @@
-package com.esmaeeil.eazybank.cars;
+package com.esmaeeil.eazybank.cards;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CarsApplicationTests {
+class CardsApplicationTests {
 
 	@Test
 	void contextLoads() {
