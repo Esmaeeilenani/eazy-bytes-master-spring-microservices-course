@@ -28,6 +28,14 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.OK).body(accountsService.fetchAccount(mobileNumber));
     }
 
+    @PutMapping
+    public ResponseEntity<String> updateAccountDetails(@RequestBody CustomerDto customerDto) {
+        accountsService.updateAccount(customerDto);
+        return ResponseEntity.ok().body(AccountsConstants.MESSAGE_200);
+    }
+
+
+
 
 
 }

@@ -72,4 +72,47 @@ public class AccountsService {
 
         return customerDto;
     }
+
+    public void updateAccount(CustomerDto customerDto) {
+        if (customerDto == null) {
+            return;
+        }
+        AccountsDto accountsDto = customerDto.getAccountsDto();
+        Customer customer = customerRepository.findByMobileNumber(customerDto.getMobileNumber())
+                .orElseThrow(() -> new ResourceNotFoundException("Customer with mobile number " + customerDto.getMobileNumber() + " not found"));
+
+
+        if (accountsDto != null) {
+            Accounts accounts = accountsRepository.findById(accountsDto.getAccountNumber())
+                    .orElseThrow(() -> new ResourceNotFoundException("Account with Id: " + accountsDto.getAccountNumber() + " not found"));
+
+            if (accountsDto.getAccountType() != null) {
+                accounts.setAccountType(accountsDto.getAccountType());
+            }
+            if (accountsDto.getBranchAddress() != null) {
+                accounts.setBranchAddress(accountsDto.getBranchAddress());
+            }
+            accounts.setUpdatedAt(LocalDateTime.now());
+            accounts.setUpdatedBy("Anonymous");
+
+            accountsRepository.save(accounts);
+
+        }
+
+
+        if (customerDto.getName() != null) {
+            customer.setName(customerDto.getName());
+        }
+
+        if (customerDto.getEmail() != null) {
+            customer.setEmail(customerDto.getEmail());
+        }
+        if (customerDto.getMobileNumber() != null) {
+            customer.setMobileNumber(customerDto.getMobileNumber());
+        }
+
+        customerRepository.save(customer);
+
+
+    }
 }

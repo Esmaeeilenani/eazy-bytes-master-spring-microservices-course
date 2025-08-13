@@ -16,29 +16,42 @@ import java.time.LocalDateTime;
 public class AccountExceptionHandler {
 
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ProblemDetail> handleException(Exception ex, ServletWebRequest request) {
+        HttpStatus internalServerError = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        ProblemDetail problemDetail = problemDetailFactory("Exception", ex, internalServerError, request);
+
+        return ResponseEntity.status(internalServerError).body(problemDetail);
+    }
+
     @ExceptionHandler(CustomerAlreadyExistsException.class)
     public ResponseEntity<ProblemDetail> handleException(CustomerAlreadyExistsException ex, ServletWebRequest request) {
 
-        log.error("CustomerAlreadyExists at {}:{}",
-                request.getHttpMethod(), request.getRequest().getRequestURI(), ex);
 
-        ProblemDetail detail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
-        detail.setProperty("timestamp", LocalDateTime.now().toString());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(detail);
+        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        ProblemDetail problemDetail = problemDetailFactory("CustomerAlreadyExists", ex, badRequest, request);
+        return ResponseEntity.status(badRequest).body(problemDetail);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ProblemDetail> handleException(ResourceNotFoundException ex, ServletWebRequest request) {
+        HttpStatus notFound = HttpStatus.NOT_FOUND;
 
-        log.error("ResourceNotFound at {}:{}",
-                request.getHttpMethod(), request.getRequest().getRequestURI(), ex);
+        ProblemDetail problemDetail = problemDetailFactory("ResourceNotFound", ex, notFound, request);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+    }
 
 
-        ProblemDetail detail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    private ProblemDetail problemDetailFactory(String handlerName, Exception ex, HttpStatus httpStatus, ServletWebRequest request) {
+        log.error("{} at {}:{}",
+                handlerName, request.getHttpMethod(), request.getRequest().getRequestURI(), ex);
+
+        ProblemDetail detail = ProblemDetail.forStatusAndDetail(httpStatus, ex.getMessage());
         detail.setProperty("timestamp", LocalDateTime.now().toString());
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(detail);
+        return detail;
     }
 
 
