@@ -11,6 +11,7 @@
 	<groupId>com.esmaeeil.eazybank</groupId>
 	<artifactId>loans</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>loans</name>
 	<description>Loans Microservice</description>
 	<url/>
@@ -93,6 +94,14 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+<!--					<image>-->
+<!--						<name>esmaeeil/${project.name}:1.0</name>-->
+<!--						<builder>paketobuildpacks/builder-jammy-base:latest</builder>-->
+<!--						<env>-->
+<!--							<BP_LOG_LEVEL>DEBUG</BP_LOG_LEVEL>-->
+<!--							<BP_DEBUG>true</BP_DEBUG>-->
+<!--						</env>-->
+<!--					</image>-->
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
