@@ -1,3 +1,5 @@
+server:
+  port: 8080
 spring:
   application:
     name: accounts
@@ -15,3 +17,4 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
