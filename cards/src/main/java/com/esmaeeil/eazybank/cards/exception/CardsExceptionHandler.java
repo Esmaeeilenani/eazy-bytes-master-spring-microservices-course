@@ -50,6 +50,7 @@ public class CardsExceptionHandler {
 
         ProblemDetail detail = ProblemDetail.forStatusAndDetail(httpStatus, ex.getMessage());
         detail.setProperty("timestamp", LocalDateTime.now().toString());
+        detail.setProperty("Method", request.getHttpMethod().toString());
 
         return detail;
     }
