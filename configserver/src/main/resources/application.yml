@@ -5,10 +5,29 @@ spring:
   application:
     name: configserver
   profiles:
-    active: native
+    #        only for classpath and system file approaches
+    #active: native
+    active: git
+
   cloud:
     config:
       server:
-        native:
-          search-locations: "classpath:/config"
+        # reading the files from git repo and branch
+        git:
+          uri: "https://github.com/Esmaeeilenani/eazy-bytes-master-spring-microservices-course.git"
+          # branch name
+          default-label: config-files
+          timeout: 5
+          # clone the repo once the server is up (do not wait  intel the first request hits)
+          clone-on-start: true
+          # always re-pull changes for updates
+          force-pull: true
 
+#        only for classpath and system file approaches
+#        native:
+#          search-locations: "classpath:/config"
+
+
+
+encrypt:
+  key: "45D81EC1EF61DF9AD8D3E5BB397F9"
