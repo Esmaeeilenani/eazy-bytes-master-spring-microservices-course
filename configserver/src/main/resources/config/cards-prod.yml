@@ -1,0 +1,12 @@
+build:
+  version: "1.0"
+
+
+cards:
+  message: "Welcome to EazyBank cards related PROD APIs "
+  contactDetails:
+    name: "product owner John Doe - Product Owner"
+    email: "owner@eazybank.com"
+  onCallSupport:
+    - (555) 555-1234
+    - (555) 523-1345
