@@ -15,7 +15,13 @@ public class CardsProperties {
 
     private List<String> onCallSupport;
 
-    public  record ContactDetails(String name, String email) {}
+
+    @Data
+    public static class ContactDetails {
+        private String name;
+        private String email;
+
+    }
 }
 
 
