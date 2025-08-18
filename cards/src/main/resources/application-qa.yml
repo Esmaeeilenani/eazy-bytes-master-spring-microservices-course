@@ -1,0 +1,23 @@
+spring:
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
+  jpa:
+    open-in-view: false
+    show-sql: true
+
+
+
+build:
+  version: "1.0"
+
+
+cards:
+  message: "Welcome to EazyBank cards related QA APIs "
+  contactDetails:
+    name: "QA John Doe - QA Lead"
+    email: "qa@eazybank.com"
+  onCallSupport:
+    - (555) 555-1234
+    - (555) 523-1345

@@ -1,0 +1,21 @@
+package com.esmaeeil.eazybank.cards.properties;
+
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.util.List;
+
+@Data
+@ConfigurationProperties(prefix = "cards")
+public class CardsProperties {
+
+    private String message;
+
+    private ContactDetails contactDetails;
+
+    private List<String> onCallSupport;
+
+    public  record ContactDetails(String name, String email) {}
+}
+
+
