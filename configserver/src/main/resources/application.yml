@@ -5,7 +5,7 @@ spring:
   application:
     name: configserver
   profiles:
-    #        only for classpath and system file approaches
+    #        only for loading config files classpath and system file approaches
     #active: native
     active: git
 
@@ -23,7 +23,7 @@ spring:
           # always re-pull changes for updates
           force-pull: true
 
-#        only for classpath and system file approaches
+#        only for loading config files classpath and system file approaches
 #        native:
 #          search-locations: "classpath:/config"
 
