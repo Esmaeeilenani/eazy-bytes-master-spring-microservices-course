@@ -8,8 +8,18 @@ spring:
     #        only for loading config files classpath and system file approaches
     #active: native
     active: git
-
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
   cloud:
+    stream:
+      rabbit:
+        bindings:
+          springCloudBusInput:
+            consumer:
+              anonymousGroupPrefix: "${spring.application.name}-service-${spring.profiles.active:default}-"
     config:
       server:
         # reading the files from git repo and branch
@@ -22,11 +32,16 @@ spring:
           clone-on-start: true
           # always re-pull changes for updates
           force-pull: true
-
 #        only for loading config files classpath and system file approaches
 #        native:
 #          search-locations: "classpath:/config"
 
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
 
 encrypt:
