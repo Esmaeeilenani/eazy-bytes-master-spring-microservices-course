@@ -3,7 +3,7 @@ build:
 
 
 cards:
-  message: "Welcome to EazyBank cards related PROD APIs "
+  message: "Welcome to EazyBank cards related production APIs "
   contactDetails:
     name: "product owner John Doe - Product Owner"
     email: "owner@eazybank.com"
