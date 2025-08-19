@@ -3,6 +3,9 @@ spring:
     console:
       path: /h2-console
       enabled: true
+      settings:
+        web-allow-others: true
+        trace: false
   jpa:
     show-sql: false
 
