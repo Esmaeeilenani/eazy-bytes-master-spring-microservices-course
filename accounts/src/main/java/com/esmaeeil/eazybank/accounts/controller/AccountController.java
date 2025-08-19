@@ -2,6 +2,7 @@ package com.esmaeeil.eazybank.accounts.controller;
 
 import com.esmaeeil.eazybank.accounts.constants.AccountsConstants;
 import com.esmaeeil.eazybank.accounts.dto.CustomerDto;
+import com.esmaeeil.eazybank.accounts.properties.AccountsProperties;
 import com.esmaeeil.eazybank.accounts.service.AccountsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
 
     private final AccountsService accountsService;
+    private final AccountsProperties accountsProperties;
 
     @Operation(
             description = "this end-point is for creating new Customer and by default will create an account for him",
@@ -64,6 +66,10 @@ public class AccountController {
         return ResponseEntity.ok().body(AccountsConstants.MESSAGE_200);
     }
 
+    @GetMapping("contact-info")
+    public ResponseEntity<AccountsProperties> getAccountsProperties() {
+        return ResponseEntity.status(HttpStatus.OK).body(accountsProperties);
+    }
 
 
 

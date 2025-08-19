@@ -2,6 +2,7 @@ package com.esmaeeil.eazybank.cards.controller;
 
 import com.esmaeeil.eazybank.cards.constants.CardsConstants;
 import com.esmaeeil.eazybank.cards.dto.CardsDto;
+import com.esmaeeil.eazybank.cards.properties.CardsProperties;
 import com.esmaeeil.eazybank.cards.service.CardsService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class CardsController {
 
     private final CardsService cardsService;
+    private final CardsProperties cardsProperties;
 
     @PostMapping
     public ResponseEntity<String> createCard(@Valid @RequestParam
@@ -64,5 +66,10 @@ public class CardsController {
         }
     }
 
+
+    @GetMapping("contact-info")
+    public ResponseEntity<CardsProperties> getCardsProperties() {
+        return ResponseEntity.status(HttpStatus.OK).body(cardsProperties);
+    }
 
 }

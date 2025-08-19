@@ -2,7 +2,7 @@ package com.esmaeeil.eazybank.loans.controller;
 
 import com.esmaeeil.eazybank.loans.constants.LoansConstants;
 import com.esmaeeil.eazybank.loans.dto.LoansDto;
-import com.esmaeeil.eazybank.loans.repository.LoansRepository;
+import com.esmaeeil.eazybank.loans.properties.LoansProperties;
 import com.esmaeeil.eazybank.loans.service.LoansService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/loans")
 public class LoansController {
     private final LoansService loansService;
+
+    private final LoansProperties loansProperties;
 
 
     @PostMapping
@@ -44,6 +46,11 @@ public class LoansController {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(LoansConstants.MESSAGE_200);
+    }
+
+    @GetMapping("contact-info")
+    public ResponseEntity<LoansProperties> getLoansProperties() {
+        return ResponseEntity.status(HttpStatus.OK).body(loansProperties);
     }
 
 }
