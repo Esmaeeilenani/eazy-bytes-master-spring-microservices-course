@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class CardsClientService implements CardsClient {
+public class CardsFeignClientService implements CardsClient {
 
     private final CardsFeignClient cardsFeignClient;
 

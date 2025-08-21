@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
- class LoansClientService implements LoansClient {
+ class LoansFeignClientService implements LoansClient {
 
     private final LoansFeignClient loansFeignClient;
 
