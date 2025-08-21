@@ -1,6 +1,5 @@
-package com.esmaeeil.eazybank.accounts.service.client;
+package com.esmaeeil.eazybank.accounts.integration.cards;
 
-import com.esmaeeil.eazybank.accounts.dto.CardsDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * )
 * */
 @FeignClient(name = "cards", path = "api/cards")
-public interface CardsFeignClient {
+ interface CardsFeignClient {
 
     @GetMapping
      ResponseEntity<CardsDto> fetchCardDetails(@RequestParam String mobileNumber);

@@ -1,4 +1,4 @@
-package com.esmaeeil.eazybank.accounts.dto;
+package com.esmaeeil.eazybank.accounts.integration.cards;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;

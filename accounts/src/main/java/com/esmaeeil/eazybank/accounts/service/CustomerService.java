@@ -1,16 +1,13 @@
 package com.esmaeeil.eazybank.accounts.service;
 
 import com.esmaeeil.eazybank.accounts.dto.AccountsDto;
-import com.esmaeeil.eazybank.accounts.dto.CustomerDto;
 import com.esmaeeil.eazybank.accounts.dto.CustomerFullDetailsDto;
-import com.esmaeeil.eazybank.accounts.entity.Accounts;
 import com.esmaeeil.eazybank.accounts.entity.Customer;
 import com.esmaeeil.eazybank.accounts.exception.ResourceNotFoundException;
-import com.esmaeeil.eazybank.accounts.mapper.AccountsMapper;
+import com.esmaeeil.eazybank.accounts.integration.cards.CardsClient;
+import com.esmaeeil.eazybank.accounts.integration.loans.LoansClient;
 import com.esmaeeil.eazybank.accounts.mapper.CustomerMapper;
 import com.esmaeeil.eazybank.accounts.repository.CustomerRepository;
-import com.esmaeeil.eazybank.accounts.service.client.CardsFeignClient;
-import com.esmaeeil.eazybank.accounts.service.client.LoansFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomerService {
 
     private final AccountsService accountsService;
-    private final CardsFeignClient cardsFeignClient;
-    private final LoansFeignClient loansFeignClient;
+    private final CardsClient cardsClient;
+    private final LoansClient loansClient;
     private final CustomerRepository customerRepository;
 
 
@@ -35,8 +32,8 @@ public class CustomerService {
         CustomerFullDetailsDto customerDto = CustomerMapper.mapToCustomerFullDetailsDto(customer);
 
         customerDto.setAccountsDto(accountsDto);
-        customerDto.setCardsDto(cardsFeignClient.fetchCardDetails(mobileNumber).getBody());
-        customerDto.setLoansDto(loansFeignClient.fetchLoanDetails(mobileNumber).getBody());
+        customerDto.setCardsDto(cardsClient.fetchCardDetails(mobileNumber));
+        customerDto.setLoansDto(loansClient.fetchLoanDetails(mobileNumber));
 
 
         return customerDto;
