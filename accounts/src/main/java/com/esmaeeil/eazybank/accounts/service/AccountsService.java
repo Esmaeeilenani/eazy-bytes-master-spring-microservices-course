@@ -54,17 +54,23 @@ public class AccountsService {
         return newAccount;
     }
 
+    public AccountsDto getAccountsByCustomerId(Long customerId) {
+        return accountsRepository.findByCustomerId(customerId)
+                .map(AccountsMapper::mapToAccountsDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Account with customer Id: " + customerId + " not found"));
+
+    }
+
 
     public CustomerDto fetchAccount(String mobileNumber) {
         Customer customer = customerRepository.findByMobileNumber(mobileNumber)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer with mobile number " + mobileNumber + " not found"));
 
-        Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId())
-                .orElseThrow(() -> new ResourceNotFoundException("Account with customer Id: " + customer.getCustomerId() + " not found"));
+        AccountsDto accountsDto = getAccountsByCustomerId(customer.getCustomerId());
 
         CustomerDto customerDto = CustomerMapper.mapToCustomerDto(customer, new CustomerDto());
 
-        customerDto.setAccountsDto(AccountsMapper.mapToAccountsDto(accounts, new AccountsDto()));
+        customerDto.setAccountsDto(accountsDto);
 
 
         return customerDto;
