@@ -1,0 +1,37 @@
+server:
+  port: 8070
+
+spring:
+  application:
+    name: "eurekaserver"
+  config:
+    import: "optional:configserver:${CONFIG_SERVER_URL:http://localhost:8071/}"
+
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    # this false because eureka server will never call any other service, in other services it should be true
+    fetchRegistry: false
+    # this false to prevent eureka server to register itself within itself
+    registerWithEureka: false
+    # the url where eureka server will be exposed to other services, register them self or look for other services
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
