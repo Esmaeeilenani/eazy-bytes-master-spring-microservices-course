@@ -1,8 +1,11 @@
 server:
   port: 9000
 spring:
+  web:
+    resources:
+      add-mappings: false
   profiles:
-    active: qa
+    active: default
   application:
     name: cards
   config:
@@ -30,9 +33,40 @@ spring:
             consumer:
               anonymousGroupPrefix: "${spring.application.name}-service-${spring.profiles.active:default}-"
 
+eureka:
+  instance:
+    # the default is thet the server should register itself using DNS but in local we relay on ip and port
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    # eureka server URL
+    service-url:
+      # must be (camelCase)
+      defaultZone: http://localhost:8070/eureka/
+
+# enable detailed information to be shown in eureka dashboard, get fetch through actuator info end-point
+info:
+  app:
+    name: cards
+    description: "Eazy Bank Cards Application"
+    version: "1.0.0"
+
 management:
   endpoints:
     web:
       exposure:
         # enable all actuator end-points
         include: "*"
+  endpoint:
+    shutdown:
+      access: unrestricted
+  # enable info end-point
+  info:
+    env:
+      enabled: true
+
+
+endpoints:
+  shoutdown:
+    enabled: true

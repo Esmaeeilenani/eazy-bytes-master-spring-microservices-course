@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -23,6 +24,15 @@ public class CardsExceptionHandler {
         ProblemDetail problemDetail = problemDetailFactory("Exception", ex, internalServerError, request);
 
         return ResponseEntity.status(internalServerError).body(problemDetail);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ProblemDetail> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex, ServletWebRequest request) {
+        HttpStatus httpStatus = HttpStatus.METHOD_NOT_ALLOWED;
+
+        ProblemDetail problemDetail = problemDetailFactory("HttpRequestMethodNotSupportedException", ex, httpStatus, request);
+
+        return ResponseEntity.status(httpStatus).body(problemDetail);
     }
 
     @ExceptionHandler(CardsAlreadyExistsException.class)
