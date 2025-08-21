@@ -43,11 +43,13 @@ services:
     depends_on:
       configserver:
         condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
       accountsdb:
         condition: service_healthy
     extends:
       file: common-config.yml
-      service: microservice-configserver-config
+      service: microservice-domain-deps-config
 
   loans:
     image: "esmaeeil/loans:2.0"
@@ -60,11 +62,13 @@ services:
     depends_on:
       configserver:
         condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
       loansdb:
         condition: service_healthy
     extends:
       file: common-config.yml
-      service: microservice-configserver-config
+      service: microservice-domain-deps-config
 
 
   cards:
@@ -78,11 +82,13 @@ services:
     depends_on:
       configserver:
         condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
       cardsdb:
         condition: service_healthy
     extends:
       file: common-config.yml
-      service: microservice-configserver-config
+      service: microservice-domain-deps-config
 
   configserver:
     image: "esmaeeil/configserver:1.0"
@@ -103,6 +109,26 @@ services:
     extends:
       file: common-config.yml
       service: microservice-base-config
+
+  eurekaserver:
+    image: "esmaeeil/eurekaserver:1.0"
+    container_name: eurekaserver-ms
+    ports:
+      - "8070:8070"
+    healthcheck:
+      test: [ "CMD-SHELL", "curl --fail --silent http://localhost:8070/actuator/health/readiness > /dev/null || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    environment:
+      SPRING_APPLICATION_NAME: "eurekaserver"
+    depends_on:
+      configserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
 
   rabbit:
     image: rabbitmq:3.13-management

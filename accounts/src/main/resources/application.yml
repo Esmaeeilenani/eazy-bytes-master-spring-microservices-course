@@ -47,7 +47,7 @@ eureka:
     # eureka server URL
     service-url:
       # must be (camelCase)
-      defaultZone: http://localhost:8070/eureka/
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8070/eureka/}
 
 # enable detailed information to be shown in eureka dashboard, get fetch through actuator info end-point
 info:

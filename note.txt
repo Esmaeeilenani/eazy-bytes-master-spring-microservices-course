@@ -23,4 +23,29 @@ docker image push docker.io/esmaeeil/eurekaserver:1.0;
 run in one line powerShell
 docker image push docker.io/esmaeeil/accounts:2.0; docker image push docker.io/esmaeeil/loans:2.0; docker image push docker.io/esmaeeil/cards:2.0; docker image push docker.io/esmaeeil/configserver:1.0; docker image push docker.io/esmaeeil/eurekaserver:1.0;
 
+a command to run mvn clean install -DskipTest on all projects under a directory (PowerShell)
+Get-ChildItem -Directory | Where-Object { Test-Path "$($_.FullName)\pom.xml" } | ForEach-Object { mvn -f "$($_.FullName)\pom.xml" clean install -DskipTests }
+
+
+
+
+run all of them command:
+
+
+Invoke-Expression '(Get-ChildItem -Directory | Where-Object { Test-Path "$($_.FullName)\pom.xml" } | ForEach-Object { mvn -f "$($_.FullName)\pom.xml" clean install -DskipTests }) ;
+docker build .\accounts\  -t esmaeeil/accounts:2.0 ;
+docker build .\loans\    -t esmaeeil/loans:2.0 ;
+docker build .\cards\    -t esmaeeil/cards:2.0 ;
+docker build .\configserver\ -t esmaeeil/configserver:1.0
+docker build .\eurekaserver\ -t esmaeeil/eurekaserver:1.0 ;
+docker image push docker.io/esmaeeil/accounts:2.0 ;
+docker image push docker.io/esmaeeil/loans:2.0 ;
+docker image push docker.io/esmaeeil/cards:2.0 ;
+docker image push docker.io/esmaeeil/configserver:1.0 ;
+docker image push docker.io/esmaeeil/eurekaserver:1.0'
+
+
+
+
+
 
