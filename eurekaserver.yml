@@ -1,0 +1,15 @@
+server:
+  port: 8070
+
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    # this is false because the Eureka server will never call any other service; in other services, it should be true
+    fetchRegistry: false
+    # this is false to prevent the Eureka server from registering itself within itself
+    registerWithEureka: false
+    # the URL where the Eureka server will be exposed to other services, register themselves, or look for other services
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
