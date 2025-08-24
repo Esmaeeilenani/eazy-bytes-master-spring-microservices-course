@@ -1,3 +1,52 @@
+server:
+  port: 8072
+
 spring:
   application:
     name: gatewayserver
+  config:
+    import: "optional:configserver:${CONFIG_SERVER_URL:http://localhost:8071/}"
+  cloud:
+    # let the gateway locate the other microservices from eureka server
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        # enable all actuator end-points
+        include: "*"
+  endpoint:
+    gateway:
+      access: unrestricted
+  # enable info end-point
+  info:
+    env:
+      enabled: true
+
+
+# enable detailed information to be shown in eureka dashboard, get fetch through actuator info end-point
+info:
+  app:
+    name: gatewayserver
+    description: "Eazy Bank gateway Application"
+    version: "1.0.0"
+
+
+
+eureka:
+  instance:
+    # the default is thet the server should register itself using DNS but in local we relay on ip and port
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    # eureka server URL
+    service-url:
+      # must be (camelCase)
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8070/eureka/}
