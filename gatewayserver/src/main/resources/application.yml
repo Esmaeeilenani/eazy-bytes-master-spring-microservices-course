@@ -13,7 +13,10 @@ spring:
         webflux:
           discovery:
             locator:
-              enabled: true
+              # true value will create routes locators based on what exists in eureka, turn it off in favor of configuring routes programmatically
+              enabled: false
+              #be default it accepts the application name all in caps
+              lower-case-service-id: true
 
 management:
   endpoints:
