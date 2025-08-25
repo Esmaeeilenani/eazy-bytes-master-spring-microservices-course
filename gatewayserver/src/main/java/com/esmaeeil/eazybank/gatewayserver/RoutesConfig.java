@@ -30,9 +30,10 @@ public class RoutesConfig {
 
             String routURI;
             String secondEntry;
-            if (key.indexOf(":") > 0) {
-                routURI = key.substring(0, key.indexOf(":"));
-                secondEntry = key.substring(key.indexOf(":") + 1);
+            int indexOfColons = key.indexOf(":");
+            if (indexOfColons > 0) {
+                routURI = key.substring(0, indexOfColons);
+                secondEntry = key.substring(indexOfColons + 1);
             } else {
                 routURI = key;
                 secondEntry = null;

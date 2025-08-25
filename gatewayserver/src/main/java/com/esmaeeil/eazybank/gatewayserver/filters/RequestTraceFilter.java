@@ -8,14 +8,16 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 
 @Order(1)
 @Component
-public class RequestTraceFilter implements GlobalFilter {
+public class RequestTraceFilter implements GlobalFilter, WebFilter {
 
-    private final Logger logger  = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final FilterUtility filterUtility;
 
@@ -23,18 +25,31 @@ public class RequestTraceFilter implements GlobalFilter {
         this.filterUtility = filterUtility;
     }
 
+
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        return chain.filter(doFilter(exchange, "application filter"));
+    }
+
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+
+        return chain.filter(doFilter(exchange, "gateway filter"));
+    }
+
+
+    private ServerWebExchange doFilter(ServerWebExchange exchange, String type) {
         HttpHeaders requestHeaders = exchange.getRequest().getHeaders();
         if (isCorrelationIdPresent(requestHeaders)) {
-            logger.debug("eazyBank-correlation-id found in RequestTraceFilter : {}",
-                    filterUtility.getCorrelationId(requestHeaders));
+            logger.debug("eazyBank-correlation-id found in RequestTraceFilter : {}, From: {}",
+                    filterUtility.getCorrelationId(requestHeaders), type);
         } else {
             String correlationID = generateCorrelationId();
             exchange = filterUtility.setCorrelationId(exchange, correlationID);
-            logger.debug("eazyBank-correlation-id generated in RequestTraceFilter : {}", correlationID);
+            logger.debug("eazyBank-correlation-id generated in RequestTraceFilter : {}, From: {}", correlationID, type);
         }
-        return chain.filter(exchange);
+        return exchange;
     }
 
     private boolean isCorrelationIdPresent(HttpHeaders requestHeaders) {
@@ -44,4 +59,6 @@ public class RequestTraceFilter implements GlobalFilter {
     private String generateCorrelationId() {
         return java.util.UUID.randomUUID().toString();
     }
+
+
 }
