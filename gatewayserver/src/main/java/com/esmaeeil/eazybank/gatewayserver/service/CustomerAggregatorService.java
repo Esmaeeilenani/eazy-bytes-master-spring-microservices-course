@@ -9,6 +9,7 @@ import com.esmaeeil.eazybank.gatewayserver.integration.loans.LoansClient;
 import com.esmaeeil.eazybank.gatewayserver.integration.loans.LoansSummery;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
 
@@ -32,15 +33,18 @@ public class CustomerAggregatorService {
 
         Mono<AccountSummary> accountSummary = accountsClient.getAccountSummaryByMobileNumber(mobileNumber)
                 .timeout(Duration.ofSeconds(2))
+                .subscribeOn(Schedulers.boundedElastic())
                 .onErrorReturn(AccountSummary.notFound());
 
         Mono<CardsSummary> cardsSummary = cardsClient.fetchCardDetails(mobileNumber)
                 .timeout(Duration.ofSeconds(2))
+                .subscribeOn(Schedulers.boundedElastic())
                 .onErrorReturn(CardsSummary.notFound());
 
 
         Mono<LoansSummery> loansSummery = loansClient.fetchLoanDetails(mobileNumber)
                 .timeout(Duration.ofSeconds(2))
+                .subscribeOn(Schedulers.boundedElastic())
                 .onErrorReturn(LoansSummery.notFound());
 
 

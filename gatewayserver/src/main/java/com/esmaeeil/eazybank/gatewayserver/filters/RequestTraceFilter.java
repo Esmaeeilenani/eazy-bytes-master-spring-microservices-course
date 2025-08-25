@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 
 @Order(1)
 @Component
-public class RequestTraceFilter implements GlobalFilter, WebFilter {
+public class RequestTraceFilter implements WebFilter {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -29,13 +29,6 @@ public class RequestTraceFilter implements GlobalFilter, WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         return chain.filter(doFilter(exchange, "application filter"));
-    }
-
-
-    @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-
-        return chain.filter(doFilter(exchange, "gateway filter"));
     }
 
 

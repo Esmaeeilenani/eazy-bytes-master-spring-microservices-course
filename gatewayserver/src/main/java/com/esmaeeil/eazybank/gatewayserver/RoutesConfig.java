@@ -46,6 +46,8 @@ public class RoutesConfig {
                                             f
                                                     .rewritePath(value + "(?<segment>/?.*)", "/api/" + Objects.requireNonNullElseGet(secondEntry, routURI::toLowerCase).toLowerCase() + "${segment}")
                                                     .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+                                                    .circuitBreaker(config -> config.setName(key + "-circuit-breaker")
+                                                            .setFallbackUri("forward:/contact-support"))
 
                                     )
                                     .uri("lb://" + routURI.toUpperCase())
