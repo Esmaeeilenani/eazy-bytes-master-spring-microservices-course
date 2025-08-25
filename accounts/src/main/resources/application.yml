@@ -8,8 +8,8 @@ spring:
     active: default
   application:
     name: accounts
-#  config:
-#    import: "optional:configserver:${CONFIG_SERVER_URL:http://localhost:8071/}"
+  #  config:
+  #    import: "optional:configserver:${CONFIG_SERVER_URL:http://localhost:8071/}"
   datasource:
     url: jdbc:mysql://localhost:3306/accountsdb
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -56,15 +56,25 @@ info:
     description: "Eazy Bank Accounts Application"
     version: "1.0.0"
 
+
+
 management:
   endpoints:
     web:
       exposure:
         # enable all actuator end-points
         include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
   endpoint:
     shutdown:
       access: unrestricted
+    health:
+      probes:
+        enabled: true
   # enable info end-point
   info:
     env:
