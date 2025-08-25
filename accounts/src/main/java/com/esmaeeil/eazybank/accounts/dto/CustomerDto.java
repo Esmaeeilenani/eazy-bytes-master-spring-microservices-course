@@ -1,5 +1,6 @@
 package com.esmaeeil.eazybank.accounts.dto;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -29,4 +30,10 @@ public class CustomerDto {
 
 
     private AccountsDto accountsDto;
+
+
+    @JsonGetter("accountDetails")
+    public AccountsDto getAccountsDto() {
+        return accountsDto;
+    }
 }
