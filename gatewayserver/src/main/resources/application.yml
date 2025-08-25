@@ -53,3 +53,12 @@ eureka:
     service-url:
       # must be (camelCase)
       defaultZone: ${EUREKA_SERVER_URL:http://localhost:8070/eureka/}
+
+
+
+logging:
+  level:
+    com:
+      esmaeeil:
+        eazybank:
+          gatewayserver: debug

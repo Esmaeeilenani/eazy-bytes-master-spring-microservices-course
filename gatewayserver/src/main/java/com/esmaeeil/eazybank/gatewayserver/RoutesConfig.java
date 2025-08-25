@@ -5,6 +5,7 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -41,7 +42,10 @@ public class RoutesConfig {
                             pred
                                     .path(value + "/**")
                                     .filters(f ->
-                                            f.rewritePath(value + "(?<segment>/?.*)", "/api/" + Objects.requireNonNullElseGet(secondEntry, routURI::toLowerCase).toLowerCase() + "${segment}")
+                                            f
+                                                    .rewritePath(value + "(?<segment>/?.*)", "/api/" + Objects.requireNonNullElseGet(secondEntry, routURI::toLowerCase).toLowerCase() + "${segment}")
+                                                    .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+
                                     )
                                     .uri("lb://" + routURI.toUpperCase())
                     );
