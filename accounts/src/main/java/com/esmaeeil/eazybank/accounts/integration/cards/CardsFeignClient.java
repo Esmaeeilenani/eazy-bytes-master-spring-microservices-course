@@ -2,21 +2,31 @@ package com.esmaeeil.eazybank.accounts.integration.cards;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /*
-* @FeignClient(
-* name = should match what exists in eureka
-* url = base url of the service, in case the required service is registered to eureka no need for the URL
+ * @FeignClient(
+ * name = should match what exists in eureka
+ * url = base url of the service, in case the required service is registered to eureka no need for the URL
  * path =  base path for the service
  * )
-* */
-@FeignClient(name = "cards", path = "api/cards")
- interface CardsFeignClient {
+ * */
+@FeignClient(name = "cards", path = "api/cards", fallback = CardsFeignClient.FallBack.class)
+interface CardsFeignClient {
 
     @GetMapping
-     ResponseEntity<CardsDto> fetchCardDetails(@RequestParam String mobileNumber);
+    ResponseEntity<CardsDto> fetchCardDetails(@RequestParam String mobileNumber);
 
+    @Component
+    class FallBack implements CardsFeignClient {
 
+        @Override
+        public ResponseEntity<CardsDto> fetchCardDetails(String mobileNumber) {
+            return ResponseEntity.ok().body(new CardsDto());
+        }
+    }
 }
+
+
