@@ -17,7 +17,7 @@ import java.util.Objects;
 public class RoutesConfig {
 
     @Bean
-    public RouteLocator getRouteLocator(RouteLocatorBuilder builder, RequestTraceFilter  requestTraceFilter) {
+    public RouteLocator getRouteLocator(RouteLocatorBuilder builder, RequestTraceFilter requestTraceFilter) {
         Map<String, String> routesConfig = new LinkedHashMap<>();
         routesConfig.put("ACCOUNTS", "/eazybank/accounts");
         routesConfig.put("ACCOUNTS:customers", "/eazybank/customers");
@@ -46,17 +46,17 @@ public class RoutesConfig {
                             pred
                                     .path(value + "/**")
                                     .filters(f ->
+
                                             f
                                                     .rewritePath(value + "(?<segment>/?.*)", "/api/" + Objects.requireNonNullElseGet(secondEntry, routURI::toLowerCase).toLowerCase() + "${segment}")
                                                     .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
                                                     .circuitBreaker(config -> config.
                                                             setName(key + "-circuit-breaker")
-                                                            .setFallbackUri("forward:/contact-support")
-                                                    ).retry(config-> config
+                                                            .setFallbackUri("forward:/contact-support"))
+                                                    .retry(config -> config
                                                             .setRetries(3)
                                                             .setMethods(HttpMethod.GET)
-                                                            .setBackoff(Duration.ofMillis(100), Duration.ofMillis(1000),2,true)
-                                                    )
+                                                            .setBackoff(Duration.ofMillis(100), Duration.ofMillis(1000), 2, true))
                                                     .filter(requestTraceFilter, 1)
 
                                     )
