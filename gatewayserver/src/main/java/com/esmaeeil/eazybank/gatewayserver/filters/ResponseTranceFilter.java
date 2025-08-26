@@ -28,10 +28,12 @@ public class ResponseTranceFilter implements GlobalFilter {
         return chain.filter(exchange)
                 // add this method to run once the response is back
                 .then(Mono.fromRunnable(() -> {
-                    HttpHeaders requestHeaders = exchange.getRequest().getHeaders();
-                    String correlationId = filterUtility.getCorrelationId(requestHeaders);
-                    logger.debug("Updated the correlation id to the outbound headers: {}", correlationId);
-                    exchange.getResponse().getHeaders().add(FilterUtility.CORRELATION_ID_KEY, correlationId);
+                    if (!exchange.getResponse().getHeaders().containsKey(FilterUtility.CORRELATION_ID_KEY)) {
+                        HttpHeaders requestHeaders = exchange.getRequest().getHeaders();
+                        String correlationId = filterUtility.getCorrelationId(requestHeaders);
+                        logger.debug("Updated the correlation id to the outbound headers: {}", correlationId);
+                        exchange.getResponse().getHeaders().add(FilterUtility.CORRELATION_ID_KEY, correlationId);
+                    }
 
                 }));
     }
