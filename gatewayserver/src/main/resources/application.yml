@@ -11,6 +11,11 @@ spring:
     gateway:
       server:
         webflux:
+          httpclient:
+            # try to establish a connection with other service for 1 sec if there is no response kill the request
+            connect-timeout: 1000
+            # after calling a service whit for 5 sec if there is no response kill the request
+            response-timeout: 5s
           discovery:
             locator:
               # true value will create routes locators based on what exists in eureka, turn it off in favor of configuring routes programmatically

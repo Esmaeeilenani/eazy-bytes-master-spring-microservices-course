@@ -32,20 +32,17 @@ public class CustomerAggregatorService {
     public Mono<CustomerAggregationDto> getCustomerAggregationByMobileNumber(String mobileNumber) {
 
         Mono<AccountSummary> accountSummary = accountsClient.getAccountSummaryByMobileNumber(mobileNumber)
-                .timeout(Duration.ofSeconds(2))
-                .subscribeOn(Schedulers.boundedElastic())
-                .onErrorReturn(AccountSummary.notFound());
+                .timeout(Duration.ofSeconds(5))
+                .subscribeOn(Schedulers.boundedElastic());
 
         Mono<CardsSummary> cardsSummary = cardsClient.fetchCardDetails(mobileNumber)
                 .timeout(Duration.ofSeconds(2))
-                .subscribeOn(Schedulers.boundedElastic())
-                .onErrorReturn(CardsSummary.notFound());
+                .subscribeOn(Schedulers.boundedElastic());
 
 
         Mono<LoansSummery> loansSummery = loansClient.fetchLoanDetails(mobileNumber)
                 .timeout(Duration.ofSeconds(2))
-                .subscribeOn(Schedulers.boundedElastic())
-                .onErrorReturn(LoansSummery.notFound());
+                .subscribeOn(Schedulers.boundedElastic());
 
 
         return Mono.zip(accountSummary, cardsSummary, loansSummery)
