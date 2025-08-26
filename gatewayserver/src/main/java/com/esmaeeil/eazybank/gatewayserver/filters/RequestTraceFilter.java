@@ -2,20 +2,17 @@ package com.esmaeeil.eazybank.gatewayserver.filters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.WebFilter;
-import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
-
-@Order(1)
+// implementing GatewayFilter required adding it to the route config
+// implementing GlobalFilter will be picked up automatically to all routs configs
 @Component
-public class RequestTraceFilter implements WebFilter {
+public class RequestTraceFilter implements GatewayFilter {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -27,7 +24,7 @@ public class RequestTraceFilter implements WebFilter {
 
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         return chain.filter(doFilter(exchange, "application filter"));
     }
 
@@ -52,6 +49,5 @@ public class RequestTraceFilter implements WebFilter {
     private String generateCorrelationId() {
         return java.util.UUID.randomUUID().toString();
     }
-
 
 }

@@ -1,10 +1,13 @@
 package com.esmaeeil.eazybank.gatewayserver;
 
+import com.esmaeeil.eazybank.gatewayserver.filters.RequestTraceFilter;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,7 +17,7 @@ import java.util.Objects;
 public class RoutesConfig {
 
     @Bean
-    public RouteLocator getRouteLocator(RouteLocatorBuilder builder) {
+    public RouteLocator getRouteLocator(RouteLocatorBuilder builder, RequestTraceFilter  requestTraceFilter) {
         Map<String, String> routesConfig = new LinkedHashMap<>();
         routesConfig.put("ACCOUNTS", "/eazybank/accounts");
         routesConfig.put("ACCOUNTS:customers", "/eazybank/customers");
@@ -46,8 +49,15 @@ public class RoutesConfig {
                                             f
                                                     .rewritePath(value + "(?<segment>/?.*)", "/api/" + Objects.requireNonNullElseGet(secondEntry, routURI::toLowerCase).toLowerCase() + "${segment}")
                                                     .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
-                                                    .circuitBreaker(config -> config.setName(key + "-circuit-breaker")
-                                                            .setFallbackUri("forward:/contact-support"))
+                                                    .circuitBreaker(config -> config.
+                                                            setName(key + "-circuit-breaker")
+                                                            .setFallbackUri("forward:/contact-support")
+                                                    ).retry(config-> config
+                                                            .setRetries(3)
+                                                            .setMethods(HttpMethod.GET)
+                                                            .setBackoff(Duration.ofMillis(100), Duration.ofMillis(1000),2,true)
+                                                    )
+                                                    .filter(requestTraceFilter, 1)
 
                                     )
                                     .uri("lb://" + routURI.toUpperCase())
