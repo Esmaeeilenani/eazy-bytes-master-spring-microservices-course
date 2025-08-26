@@ -4,6 +4,7 @@ import com.esmaeeil.eazybank.accounts.constants.AccountsConstants;
 import com.esmaeeil.eazybank.accounts.dto.CustomerDto;
 import com.esmaeeil.eazybank.accounts.properties.AccountsProperties;
 import com.esmaeeil.eazybank.accounts.service.AccountsService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -66,6 +67,9 @@ public class AccountController {
         return ResponseEntity.ok().body(AccountsConstants.MESSAGE_200);
     }
 
+
+
+    @RateLimiter(name = "getAccountsProperties")
     @GetMapping("contact-info")
     public ResponseEntity<AccountsProperties> getAccountsProperties() {
         return ResponseEntity.status(HttpStatus.OK).body(accountsProperties);

@@ -1,6 +1,8 @@
-package com.esmaeeil.eazybank.gatewayserver;
+package com.esmaeeil.eazybank.gatewayserver.config;
 
 import com.esmaeeil.eazybank.gatewayserver.filters.RequestTraceFilter;
+import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
+import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +19,11 @@ import java.util.Objects;
 public class RoutesConfig {
 
     @Bean
-    public RouteLocator getRouteLocator(RouteLocatorBuilder builder, RequestTraceFilter requestTraceFilter) {
+    public RouteLocator getRouteLocator(RouteLocatorBuilder builder,
+                                        RequestTraceFilter requestTraceFilter,
+                                        RedisRateLimiter redisRateLimiter,
+                                        KeyResolver userKeyResolver
+                                        ) {
         Map<String, String> routesConfig = new LinkedHashMap<>();
         routesConfig.put("ACCOUNTS", "/eazybank/accounts");
         routesConfig.put("ACCOUNTS:customers", "/eazybank/customers");
@@ -57,6 +63,11 @@ public class RoutesConfig {
                                                             .setRetries(3)
                                                             .setMethods(HttpMethod.GET)
                                                             .setBackoff(Duration.ofMillis(100), Duration.ofMillis(1000), 2, true))
+                                                    .requestRateLimiter(config ->
+                                                            config
+                                                                    .setRateLimiter(redisRateLimiter)
+                                                                    .setKeyResolver(userKeyResolver)
+                                                            )
                                                     .filter(requestTraceFilter, 1)
 
                                     )

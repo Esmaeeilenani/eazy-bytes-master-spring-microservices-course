@@ -96,3 +96,12 @@ resilience4j:
         permitted-number-of-calls-in-half-open-state: 2
         failure-rate-threshold: 50
         wait-duration-in-open-state: 10000
+  ratelimiter:
+    configs:
+      default:
+        # this prop is to till any coming request if not accepted you can wait for this duration
+        timeout-duration: 1000
+        # this prop is to configure the request counter, if it reached 0 then do not accept any request
+        limit-for-period: 1
+        # this prop is timer to reset limit-for-period prop
+        limit-refresh-period:  5000
