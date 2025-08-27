@@ -47,8 +47,8 @@ services:
       SPRING_APPLICATION_NAME: "accounts"
       SPRING_DATASOURCE_URL: "jdbc:mysql://accountsdb:3306/accountsdb"
     depends_on:
-      configserver:
-        condition: service_healthy
+#      configserver:
+#        condition: service_healthy
       eurekaserver:
         condition: service_healthy
       accountsdb:
@@ -72,8 +72,8 @@ services:
       SPRING_APPLICATION_NAME: "loans"
       SPRING_DATASOURCE_URL: "jdbc:mysql://loansdb:3306/loansdb"
     depends_on:
-      configserver:
-        condition: service_healthy
+#      configserver:
+#        condition: service_healthy
       eurekaserver:
         condition: service_healthy
       loansdb:
@@ -98,8 +98,8 @@ services:
       SPRING_APPLICATION_NAME: "cards"
       SPRING_DATASOURCE_URL: "jdbc:mysql://cardsdb:3306/cardsdb"
     depends_on:
-      configserver:
-        condition: service_healthy
+#      configserver:
+#        condition: service_healthy
       eurekaserver:
         condition: service_healthy
       cardsdb:
@@ -108,25 +108,25 @@ services:
       file: common-config.yml
       service: microservice-domain-deps-config
 
-  configserver:
-    image: "esmaeeil/configserver:1.0"
-    container_name: configserver-ms
-    ports:
-      - "8071:8071"
-    healthcheck:
-      test: [ "CMD-SHELL", "curl --fail --silent http://localhost:8071/actuator/health/readiness > /dev/null || exit 1" ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 10s
-    environment:
-      SPRING_APPLICATION_NAME: "configserver"
-    depends_on:
-      rabbit:
-        condition: service_healthy
-    extends:
-      file: common-config.yml
-      service: microservice-base-config
+#  configserver:
+#    image: "esmaeeil/configserver:1.0"
+#    container_name: configserver-ms
+#    ports:
+#      - "8071:8071"
+#    healthcheck:
+#      test: [ "CMD-SHELL", "curl --fail --silent http://localhost:8071/actuator/health/readiness > /dev/null || exit 1" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 10
+#      start_period: 10s
+#    environment:
+#      SPRING_APPLICATION_NAME: "configserver"
+#    depends_on:
+#      rabbit:
+#        condition: service_healthy
+#    extends:
+#      file: common-config.yml
+#      service: microservice-base-config
 
   eurekaserver:
     image: "esmaeeil/eurekaserver:1.0"
@@ -141,9 +141,9 @@ services:
       start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: "eurekaserver"
-    depends_on:
-      configserver:
-        condition: service_healthy
+#    depends_on:
+#      configserver:
+#        condition: service_healthy
     extends:
       file: common-config.yml
       service: microservice-configserver-config
@@ -155,9 +155,13 @@ services:
       - "8072:8072"
     environment:
       SPRING_APPLICATION_NAME: "gatewayserver"
+      SPRING_DATA_REDIS_CONNECT-TIMEOUT: 2s
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATA_REDIS_TIMEOUT: 1s
     depends_on:
-      configserver:
-        condition: service_healthy
+#      configserver:
+#        condition: service_healthy
       eurekaserver:
         condition: service_healthy
       accounts:
@@ -165,6 +169,8 @@ services:
       cards:
         condition: service_healthy
       loans:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     extends:
       file: common-config.yml
@@ -186,7 +192,17 @@ services:
       file: common-config.yml
       service: network-deploy-service
 
-
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG" ]
+      timeout: 10s
+      retries: 10
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
 
 networks:
   eazybank-course:

@@ -26,7 +26,14 @@ Get-ChildItem -Directory | Where-Object { Test-Path "$($_.FullName)\pom.xml" } |
 
 run all of them command:
 
-Invoke-Expression '(Get-ChildItem -Directory | Where-Object { Test-Path "$($_.FullName)\pom.xml" } | ForEach-Object { mvn -f "$($_.FullName)\pom.xml" clean install -DskipTests }) ;
+
+NOTE: add this to mvn command  only in ELM Network -s "C:\Users\esenani\.m2\settings 5.xml"
+
+Invoke-Expression '(Get-ChildItem -Directory |
+                     Where-Object { Test-Path "$($_.FullName)\pom.xml" } |
+                     ForEach-Object {
+                       mvn  -f "$($_.FullName)\pom.xml" clean install -DskipTests
+                     }) ;
 docker build .\accounts\  -t esmaeeil/accounts:2.0 ;
 docker build .\loans\    -t esmaeeil/loans:2.0 ;
 docker build .\cards\    -t esmaeeil/cards:2.0 ;
