@@ -23,12 +23,12 @@ public class CustomerController {
     public ResponseEntity<CustomerFullDetailsDto> getCustomer(
             @Valid @RequestParam
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
-            String mobileNumber,
-            @RequestHeader(name = "eazybank-correlation-id", required = false) String correlationId
+            String mobileNumber
     ) {
-        log.debug("eazybank-correlation-id found: {}", correlationId);
-
-        return ResponseEntity.ok(customerService.getCustomerFullDetailsByMobileNumber(mobileNumber));
+        log.debug("fetching Customer Full Details");
+        CustomerFullDetailsDto customerFullDetailsByMobileNumber = customerService.getCustomerFullDetailsByMobileNumber(mobileNumber);
+        log.debug("fetching Customer Full Details  finished");
+        return ResponseEntity.ok(customerFullDetailsByMobileNumber);
     }
 
 

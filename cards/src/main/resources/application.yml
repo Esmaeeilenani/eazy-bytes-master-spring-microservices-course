@@ -78,3 +78,14 @@ management:
 endpoints:
   shoutdown:
     enabled: true
+
+
+
+logging:
+  level:
+    com:
+      esmaeeil:
+        eazybank:
+          cards: DEBUG
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"

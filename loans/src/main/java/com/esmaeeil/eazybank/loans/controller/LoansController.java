@@ -7,10 +7,12 @@ import com.esmaeeil.eazybank.loans.service.LoansService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/loans")
@@ -35,7 +37,9 @@ public class LoansController {
     public ResponseEntity<LoansDto> fetchLoanDetails(@RequestParam
                                                      @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
                                                      String mobileNumber) {
+        log.debug("fetching Customer Loans Details");
         LoansDto loansDto = loansService.fetchLoan(mobileNumber);
+        log.debug("fetching Customer Loans Details  finished");
         return ResponseEntity.status(HttpStatus.OK).body(loansDto);
     }
 

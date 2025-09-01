@@ -105,3 +105,13 @@ resilience4j:
         limit-for-period: 1
         # this prop is timer to reset limit-for-period prop
         limit-refresh-period:  5000
+
+
+logging:
+  level:
+    com:
+      esmaeeil:
+        eazybank:
+          accounts: DEBUG
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"

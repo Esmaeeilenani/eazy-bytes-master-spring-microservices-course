@@ -7,12 +7,13 @@ import com.esmaeeil.eazybank.gatewayserver.integration.cards.CardsClient;
 import com.esmaeeil.eazybank.gatewayserver.integration.cards.CardsSummary;
 import com.esmaeeil.eazybank.gatewayserver.integration.loans.LoansClient;
 import com.esmaeeil.eazybank.gatewayserver.integration.loans.LoansSummery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
-
 @Service
 public class CustomerAggregatorService {
 
@@ -21,6 +22,7 @@ public class CustomerAggregatorService {
     private final CardsClient cardsClient;
     private final LoansClient loansClient;
 
+    private static final Logger log = LoggerFactory.getLogger(CustomerAggregatorService.class);
 
     public CustomerAggregatorService(AccountsClient accountsClient, CardsClient cardsClient, LoansClient loansClient) {
         this.accountsClient = accountsClient;
@@ -30,7 +32,7 @@ public class CustomerAggregatorService {
 
 
     public Mono<CustomerAggregationDto> getCustomerAggregationByMobileNumber(String mobileNumber) {
-
+        log.debug("fetching Customer Full Details using API Aggregation");
         Mono<AccountSummary> accountSummary = accountsClient.getAccountSummaryByMobileNumber(mobileNumber)
                 .timeout(Duration.ofSeconds(5))
                 .subscribeOn(Schedulers.boundedElastic());
@@ -44,6 +46,7 @@ public class CustomerAggregatorService {
                 .timeout(Duration.ofSeconds(2))
                 .subscribeOn(Schedulers.boundedElastic());
 
+        log.debug("fetching Customer Full Details using API Aggregation  finished");
 
         return Mono.zip(accountSummary, cardsSummary, loansSummery)
                 .map(t -> new CustomerAggregationDto(t.getT1(), t.getT2(), t.getT3()));

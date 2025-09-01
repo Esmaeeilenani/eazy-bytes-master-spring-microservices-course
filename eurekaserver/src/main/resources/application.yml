@@ -35,3 +35,11 @@ management:
     health:
       probes:
         enabled: true
+
+
+logging:
+  level:
+    com:
+      esmaeeil:
+        eazybank:
+          eurekaserver: DEBUG

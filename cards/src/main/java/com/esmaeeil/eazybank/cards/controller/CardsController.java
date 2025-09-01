@@ -7,6 +7,7 @@ import com.esmaeeil.eazybank.cards.service.CardsService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("api/cards")
 @Validated
+@Slf4j
 public class CardsController {
 
     private final CardsService cardsService;
@@ -36,7 +38,9 @@ public class CardsController {
     public ResponseEntity<CardsDto> fetchCardDetails(@RequestParam
                                                      @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
                                                      String mobileNumber) {
+        log.debug("fetching Customer Cards Details");
         CardsDto cardsDto = cardsService.fetchCard(mobileNumber);
+        log.debug("fetching Customer Cards Details finished");
         return ResponseEntity.status(HttpStatus.OK).body(cardsDto);
     }
 
