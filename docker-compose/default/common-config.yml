@@ -27,6 +27,10 @@ services:
       SPRING_PROFILES_ACTIVE: default
       CONFIG_SERVER_URL: http://configserver:8071/
       EUREKA_SERVER_URL: http://eurekaserver:8070/eureka/
+      JAVA_TOOL_OPTIONS: "-javaagent:/opt/otel/opentelemetry-javaagent.jar"
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4318
+      OTEL_METRICS_EXPORTER: none
+      OTEL_LOGS_EXPORTER: none
 
   #  db config
   microservice-db-config:

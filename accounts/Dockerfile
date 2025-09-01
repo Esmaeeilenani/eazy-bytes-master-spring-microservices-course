@@ -12,5 +12,7 @@ RUN apt-get update \
 #copy the jar inside the target folder to image
 COPY target/*.jar app.jar
 
+COPY target/otel/opentelemetry-javaagent.jar /opt/otel/opentelemetry-javaagent.jar
+
 #command resposible for running the jar using java
 ENTRYPOINT ["java","-jar","app.jar"]
