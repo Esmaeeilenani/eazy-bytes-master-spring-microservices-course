@@ -12,6 +12,12 @@ spring:
       host: localhost
       port: 6379
       timeout: 1s
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # the URL where my resource server will try to validate the token provided by client
+          jwk-set-uri: "http://${OAUTH2_AUTH_SERVER_URL:localhost:7080}/realms/master/protocol/openid-connect/certs"
   cloud:
     # let the gateway locate the other microservices from eureka server
     gateway:
