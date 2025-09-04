@@ -2,6 +2,7 @@ package com.esmaeeil.eazybank.accounts.service;
 
 import com.esmaeeil.eazybank.accounts.constants.AccountsConstants;
 import com.esmaeeil.eazybank.accounts.dto.AccountsDto;
+import com.esmaeeil.eazybank.accounts.dto.AccountsMsgDto;
 import com.esmaeeil.eazybank.accounts.dto.CustomerDto;
 import com.esmaeeil.eazybank.accounts.entity.Accounts;
 import com.esmaeeil.eazybank.accounts.entity.Customer;
@@ -12,12 +13,15 @@ import com.esmaeeil.eazybank.accounts.mapper.CustomerMapper;
 import com.esmaeeil.eazybank.accounts.repository.AccountsRepository;
 import com.esmaeeil.eazybank.accounts.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Random;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -25,7 +29,7 @@ public class AccountsService {
 
     private final AccountsRepository accountsRepository;
     private final CustomerRepository customerRepository;
-
+    private final StreamBridge streamBridge;
 
     public void createAccount(CustomerDto customerDto) {
         if (customerRepository.existsByMobileNumber(customerDto.getMobileNumber())) {
@@ -35,8 +39,18 @@ public class AccountsService {
         Customer customer = CustomerMapper.mapToCustomer(customerDto, new Customer());
         customerRepository.save(customer);
 
-        accountsRepository.save(createNewAccount(customer));
+        Accounts savedAccount = accountsRepository.save(createNewAccount(customer));
 
+        sendCommunicationRabbit(savedAccount,customer);
+
+    }
+
+
+    private void sendCommunicationRabbit(Accounts accounts, Customer customer) {
+        AccountsMsgDto accountsMsgDto = new AccountsMsgDto(accounts.getAccountNumber(), customer.getName(), customer.getEmail(), customer.getMobileNumber());
+        log.info("Sending account message to RabbitMQ");
+        boolean sentStatus = streamBridge.send("sendCommunication-out-0", accountsMsgDto);
+        log.info("Sent account message to RabbitMQ status: {}", sentStatus);
 
     }
 
