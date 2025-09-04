@@ -1,10 +1,10 @@
 package com.esmaeeil.eazybank.gatewayserver.security;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -18,9 +18,9 @@ import reactor.core.publisher.Mono;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
-
+    @ConditionalOnBooleanProperty(value = "app.security.enabled")
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain enabledSpringSecurityFilterChain(ServerHttpSecurity http) {
 
 
         return http
@@ -33,6 +33,20 @@ public class SecurityConfig {
                                 )
                 )
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .build();
+    }
+
+
+    @ConditionalOnBooleanProperty(value = "app.security.enabled", havingValue = false)
+    @Bean
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+
+
+        return http
+                .authorizeExchange(spec -> spec
+                        .anyExchange().permitAll())
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .cors(ServerHttpSecurity.CorsSpec::disable)
                 .build();
     }
 

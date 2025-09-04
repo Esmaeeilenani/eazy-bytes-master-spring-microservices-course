@@ -88,3 +88,7 @@ logging:
           gatewayserver: debug
   pattern:
     level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+
+app:
+  security:
+    enabled: false
