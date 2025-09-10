@@ -35,12 +35,17 @@ spring:
       definition: updateCommunication
 
     stream:
+      defaultBinder: kafka
       bindings:
         sendCommunication-out-0:
           destination: send-communication
         updateCommunication-in-0:
           destination: communication-sent
-          group: ${spring.application.name  }
+          group: ${spring.application.name}
+      kafka:
+        binder:
+          brokers: ${KAFKA_URL:localhost:9092}
+          autoCreateTopics: true
       rabbit:
         bindings:
           springCloudBusInput:
