@@ -43,14 +43,14 @@ docker build .\accounts\  -t esmaeeil/accounts:2.0 ;
 docker build .\loans\    -t esmaeeil/loans:2.0 ;
 docker build .\cards\    -t esmaeeil/cards:2.0 ;
 docker build .\message\    -t esmaeeil/message:2.0 ;
-docker build .\eurekaserver\ -t esmaeeil/eurekaserver:1.0 ;
-docker build .\gatewayserver\ -t esmaeeil/gatewayserver:1.0 ;
+docker build .\eurekaserver\ -t esmaeeil/eurekaserver:2.0 ;
+docker build .\gatewayserver\ -t esmaeeil/gatewayserver:2.0 ;
 docker image push docker.io/esmaeeil/accounts:2.0 ;
 docker image push docker.io/esmaeeil/loans:2.0 ;
 docker image push docker.io/esmaeeil/cards:2.0 ;
 docker image push docker.io/esmaeeil/message:2.0 ;
-docker image push docker.io/esmaeeil/eurekaserver:1.0 ;
-docker image push docker.io/esmaeeil/gatewayserver:1.0'
+docker image push docker.io/esmaeeil/eurekaserver:2.0 ;
+docker image push docker.io/esmaeeil/gatewayserver:2.0'
 
 
 

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eazybank-configmap
+
+data:
+  SPRING_PROFILES_ACTIVE: "default"
+  CONFIG_SERVER_URL: "http://configserver:8071/"
+  EUREKA_SERVER_URL: "http://eurekaserver:8070/eureka/"
+  SPRING_RABBITMQ_HOST: "rabbit"
+
+
+  CONFIGSERVER_APPLICATION_NAME: "configserver"
+  EUREKA_APPLICATION_NAME: "eurekaserver"
+  ACCOUNTS_APPLICATION_NAME: "accounts"
+  LOANS_APPLICATION_NAME: "loans"
+  CARDS_APPLICATION_NAME: "cards"
+  GATEWAY_APPLICATION_NAME: "gatewayserver"
+
+#  JAVA_TOOL_OPTIONS: "-javaagent:/opt/otel/opentelemetry-javaagent.jar"
+#  OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4318
+#  OTEL_METRICS_EXPORTER: none
+#  OTEL_LOGS_EXPORTER: none
