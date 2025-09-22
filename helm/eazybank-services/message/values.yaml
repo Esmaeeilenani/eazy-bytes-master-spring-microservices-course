@@ -10,7 +10,7 @@ replicaCount: 1
 
 image:
   repository: esmaeeil/message
-  tag: 2.0
+  tag: "2.0"
 
 containerPort: 9010
 

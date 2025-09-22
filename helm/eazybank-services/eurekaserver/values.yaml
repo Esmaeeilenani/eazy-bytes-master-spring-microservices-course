@@ -10,7 +10,7 @@ replicaCount: 1
 
 image:
   repository: esmaeeil/eurekaserver
-  tag: 2.0
+  tag: "2.0"
 
 containerPort: 8070
 
@@ -21,7 +21,7 @@ service:
 
 appname_enabled: true
 profile_enabled: true
-otel_enabled: true
+otel_enabled: false
 config_enabled: false
 eureka_enabled: false
 resouceserver_enabled: false
